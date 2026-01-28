@@ -31,8 +31,8 @@ void init_cart_rom(struct cart_rom* cart_rom,
 
 void poweron_cart_rom(struct cart_rom* cart_rom)
 {
-//    cart_rom->last_write  = 0;
-//    cart_rom->rom_written = 0;
+    cart_rom->last_write  = 0;
+    cart_rom->rom_written = 0;
 }
 
 
