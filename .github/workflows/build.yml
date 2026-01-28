@@ -32,10 +32,8 @@ jobs:
       # 4. ビルド実行
       - name: Run Make
         run: |
-          # distディレクトリがない場合に備えて作成
-          mkdir -p dist
-          # リポジトリ直下のMakefileを実行
-          make
+        cd code/src
+        make -j
 
       # 5. 成果物(WASM/JS/HTML)を保存
       - name: Upload Artifact
