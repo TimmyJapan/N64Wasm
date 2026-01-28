@@ -41,15 +41,8 @@ int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
     struct pi_controller* pi    = (struct pi_controller*)opaque;
     uint32_t addr               = ROM_ADDR(address);
 
-    if (pi->cart_rom.rom_written)
-    {
-        *value                   = pi->cart_rom.last_write;
-        pi->cart_rom.rom_written = 0;
-    }
-    else
-    {
         *value = *(uint32_t*)(pi->cart_rom.rom + addr);
-    }
+    
 
     return 0;
 }
@@ -57,8 +50,8 @@ int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
 int write_cart_rom(void* opaque, uint32_t address, uint32_t value, uint32_t mask)
 {
     struct pi_controller* pi     = (struct pi_controller*)opaque;
-    pi->cart_rom.last_write      = value & mask;
-    pi->cart_rom.rom_written     = 1;
+//    pi->cart_rom.last_write      = value & mask;
+//    pi->cart_rom.rom_written     = 1;
 
     return 0;
 }
