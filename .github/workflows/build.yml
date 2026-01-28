@@ -1,0 +1,47 @@
+name: Build N64Wasm (Emscripten 2.0.7)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # 手動実行ボタンも追加
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. コードのチェックアウト
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # 2. Emscripten 2.0.7 のセットアップ
+      - name: Setup Emscripten 2.0.7
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 2.0.7
+          # 古いバージョンなのでキャッシュを効かせてビルド時間を短縮
+          actions-cache-folder: 'emsdk-cache'
+
+      # 3. 依存ツールの確認
+      - name: Check Build Tools
+        run: |
+          emcc -v
+          make -v
+
+      # 4. ビルド実行
+      - name: Run Make
+        run: |
+          # distディレクトリがない場合に備えて作成
+          mkdir -p dist
+          # リポジトリ直下のMakefileを実行
+          make
+
+      # 5. 成果物(WASM/JS/HTML)を保存
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: n64wasm-fixed-build
+          path: |
+            dist/
+            index.html
