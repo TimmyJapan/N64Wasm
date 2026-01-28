@@ -31,9 +31,7 @@ jobs:
 
       # 4. ビルド実行
       - name: Run Make
-        run: |
-        cd code
-        make -j
+        run: make -j -C code
 
       # 5. 成果物(WASM/JS/HTML)を保存
       - name: Upload Artifact
@@ -42,4 +40,4 @@ jobs:
           name: n64wasm-fixed-build
           path: |
             dist/
-            index.html
+            
