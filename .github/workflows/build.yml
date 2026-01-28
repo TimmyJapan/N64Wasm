@@ -32,7 +32,7 @@ jobs:
       # 4. ビルド実行
       - name: Run Make
         run: |
-        cd code/src
+        cd code
         make -j
 
       # 5. 成果物(WASM/JS/HTML)を保存
