@@ -25,8 +25,8 @@
 void init_cart_rom(struct cart_rom* cart_rom,
                       uint8_t* rom, size_t rom_size)
 {
-    cart_rom->rom      = rom;
-    cart_rom->rom_size = rom_size;
+//    cart_rom->rom      = rom;
+//    cart_rom->rom_size = rom_size;
 }
 
 void poweron_cart_rom(struct cart_rom* cart_rom)
