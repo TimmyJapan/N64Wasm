@@ -33,11 +33,10 @@ jobs:
       - name: Run Make
         run: make -j -C code
 
-      # 5. 成果物(WASM/JS/HTML)を保存
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: n64wasm-fixed-build
-          path: |
-            dist/
+          # distフォルダの中身をルートとして扱う
+          path: 'dist/' 
+
             
