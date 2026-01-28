@@ -43,7 +43,8 @@ int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
 
     if (pi->cart_rom.rom_written)
     {
-        pi->cart_rom.rom_written = pi->cart_rom.rom_written;
+        *value                   = pi->cart_rom.last_write;
+        pi->cart_rom.rom_written = 0;
     }
     else
     {
