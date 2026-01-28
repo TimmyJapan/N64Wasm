@@ -57,8 +57,8 @@ int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
 int write_cart_rom(void* opaque, uint32_t address, uint32_t value, uint32_t mask)
 {
     struct pi_controller* pi     = (struct pi_controller*)opaque;
-//    pi->cart_rom.last_write      = value & mask;
-//    pi->cart_rom.rom_written     = 1;
+    pi->cart_rom.last_write      = value & mask;
+    pi->cart_rom.rom_written     = 1;
 
     return 0;
 }
