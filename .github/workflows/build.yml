@@ -3,40 +3,54 @@ name: Build N64Wasm (Emscripten 2.0.7)
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # 手動実行ボタンも追加
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. コードのチェックアウト
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      # 2. Emscripten 2.0.7 のセットアップ
+      # Emscriptenのキャッシュを有効化
+      - name: Cache emsdk
+        uses: actions/cache@v4
+        with:
+          path: emsdk-cache
+          key: ${{ runner.os }}-emsdk-2.0.7
+
       - name: Setup Emscripten 2.0.7
         uses: mymindstorm/setup-emsdk@v14
         with:
           version: 2.0.7
-          # 古いバージョンなのでキャッシュを効かせてビルド時間を短縮
           actions-cache-folder: 'emsdk-cache'
 
-      # 3. 依存ツールの確認
-      - name: Check Build Tools
-        run: |
-          emcc -v
-          make -v
-
-      # 4. ビルド実行
       - name: Run Make
-        run: make -j -C code
+        run: |
+          make -j$(nproc) -C code
+          # index.htmlをdistへ移動（これがないとPagesで表示されません）
+          cp index.html dist/ || true
+          cp -r assets dist/ || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # distフォルダの中身をルートとして扱う
-          path: 'dist/' 
+          path: 'dist/'
 
-            
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
