@@ -22,6 +22,8 @@
 #include "cart_rom.h"
 #include "pi_controller.h"
 
+//for AI Slop
+#define Int int
 void init_cart_rom(struct cart_rom* cart_rom,
                       uint8_t* rom, size_t rom_size)
 {
@@ -39,27 +41,39 @@ void poweron_cart_rom(struct cart_rom* cart_rom)
 int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
 {
     struct pi_controller* pi    = (struct pi_controller*)opaque;
-    uint32_t addr               = ROM_ADDR(address); // ここで 0x0fffffff になる
+    uint32_t addr               = ROM_ADDR(address);
 
     if (pi->cart_rom.rom_written)
     {
         *value                   = pi->cart_rom.last_write;
         pi->cart_rom.rom_written = 0;
+        return 0;
+    }
+
+    if (pi->cart_rom.rom != NULL && (addr + 3) < pi->cart_rom.rom_size)
+    {
+        *value = *(uint32_t*)(pi->cart_rom.rom + addr);
     }
     else
     {
-        if (addr + 3 < pi->cart_rom.rom_size) 
-        {
-            *value = *(uint32_t*)(pi->cart_rom.rom + addr);
-        }
-        else 
-        {
-            *value = 0x00000000; 
-        }
+        *value = 0x00000000;
     }
 
     return 0;
 }
+
+void init_cart_rom(struct cart_rom* cart_rom, uint8_t* rom, size_t rom_size)
+{
+    cart_rom->rom      = rom;
+    cart_rom->rom_size = rom_size;
+}
+
+void poweron_cart_rom(struct cart_rom* cart_rom)
+{
+    cart_rom->last_write  = 0;
+    cart_rom->rom_written = 0;
+}
+
 
 
 int write_cart_rom(void* opaque, uint32_t address, uint32_t value, uint32_t mask)
