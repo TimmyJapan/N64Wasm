@@ -22,8 +22,6 @@
 #include "cart_rom.h"
 #include "pi_controller.h"
 
-//for AI Slop
-#define Int int
 void init_cart_rom(struct cart_rom* cart_rom,
                       uint8_t* rom, size_t rom_size)
 {
