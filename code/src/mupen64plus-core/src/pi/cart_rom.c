@@ -60,15 +60,6 @@ int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
     return 0;
 }
 
-
-void poweron_cart_rom(struct cart_rom* cart_rom)
-{
-    cart_rom->last_write  = 0;
-    cart_rom->rom_written = 0;
-}
-
-
-
 int write_cart_rom(void* opaque, uint32_t address, uint32_t value, uint32_t mask)
 {
     struct pi_controller* pi     = (struct pi_controller*)opaque;
