@@ -36,7 +36,7 @@ void poweron_cart_rom(struct cart_rom* cart_rom)
 }
 
 
-Int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
+int read_cart_rom(void* opaque, uint32_t address, uint32_t* value)
 {
     struct pi_controller* pi    = (struct pi_controller*)opaque;
     uint32_t addr               = ROM_ADDR(address); // ここで 0x0fffffff になる
